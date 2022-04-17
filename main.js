@@ -6,9 +6,11 @@ element_of_array = quick_draw_data_set[random_number];
 
 console.log(element_of_array);
 
+document.getElementById("lblSketchtobedrawn").innerHTML = element_of_array;
+
 timer_counter = 0;
 timer_check = "";
-draw_sketch = "";
+drawn_sketch = "";
 answer_holder = "";
 score = 0;
 
@@ -16,6 +18,7 @@ function setup() {
     canvas = createCanvas(280, 280);
     canvas.center();
     background('white');
+    canvas.mouseReleased(classifyCanvas);
 }
 
 function preload() {
@@ -23,12 +26,33 @@ function preload() {
 }
 
 function check_sketch() {
+    timer_counter++;
+    document.getElementById("lblTimer").innerHTML = "Timer: " + timer_counter;
+    console.log(timer_counter);
+    if(timer_counter > 500) {
+        timer_counter = 0;
+        timer_check = "completed";
+    }
 
+    if(timer_check == "completed" || answer_holder == "set") {
+        timer_check = "";
+        answer_holder = "";
+        updateCanvas();
+    }
 }
 
 function draw() {
     check_sketch();
-    
+    strokeWeight(5);
+    stroke(0);
+    if(drawn_sketch == element_of_array) {
+        answer_holder = "set";
+        score++;
+        document.getElementById("lblScore").innerHTML = "Score: " + score;
+    }
+    if(mouseIsPressed) {
+        line(pmouseX, pmouseY, mouseX, mouseY);
+    }
 }
 
 function classifyCanvas() {
